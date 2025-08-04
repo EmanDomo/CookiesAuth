@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import IdleLogout from "../components/IdleLogout";
+import { API_BASE_URL } from "../apiRoutes";
 
 
 const Home = () => {
@@ -12,7 +13,7 @@ const Home = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/user/logout", {}, { withCredentials: true });
+      await axios.post(`${ API_BASE_URL }/api/user/logout`, {}, { withCredentials: true });
       navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
@@ -23,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     const fetchUsers = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/user/get-all-users", {
+    const res = await axios.get(`${ API_BASE_URL }/api/user/get-all-users`, {
       withCredentials: true
     });
 

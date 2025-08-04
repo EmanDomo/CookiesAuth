@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../apiRoutes";
 
 const Login = () => {
   const [userName, setUsername] = useState("");
@@ -10,54 +11,47 @@ const Login = () => {
 
   const handleNavigateToRegister = () => {
     navigate("/register");
-  }
+  };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!userName || !password) {
-    setError("Please fill in all fields");
-    return;
-  }
-
-  try {
-    setError("");
-
-    const res = await axios.post(
-      'http://localhost:3000/api/user/user-login',
-      { userName, password },
-      { withCredentials: true }
-    );
-
-    console.log("Full API Response:", res.data);
-
-    if (res.data.success === true || res.data.message?.toLowerCase().includes("success")) {
-      // ✅ Store user data in localStorage
-      localStorage.setItem("user", JSON.stringify(res.data));
-
-      const role = res.data.role || res.data.user?.role;
-
-      console.log("User role:", role);
-
-      if (role === "admin") {
-        navigate("/admin");
-      } else if (role === "user") {
-        navigate("/home");
-      } else {
-        // fallback if role is not recognized
-        navigate("/");
-      }
-
-    } else {
-      console.log("Login failed, message:", res.data.message);
-      setError(res.data.message || "Invalid username or password");
+    if (!userName || !password) {
+      setError("Please fill in all fields");
+      return;
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    setError("Login failed. Please try again.");
-  }
-};
 
+    try {
+      setError("");
+
+      const res = await axios.post(
+        `${API_BASE_URL}/api/user/user-login`,
+        { userName, password },
+        { withCredentials: true }
+      );
+
+      console.log("Full API Response:", res.data);
+
+      if (res.data.success) {
+        const role = res.data.user?.role;
+        console.log("User role:", role);
+
+        if (role === "admin") {
+          navigate("/admin");
+        } else if (role === "user") {
+          navigate("/home");
+        } else {
+          navigate("/");
+        }
+      } else {
+        console.log("Login failed, message:", res.data.message);
+        setError(res.data.message || "Invalid username or password");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Login failed. Please try again.");
+    }
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -88,14 +82,13 @@ const handleSubmit = async (e) => {
           <button type="submit" className="btn btn-primary w-100">
             Login
           </button>
-         <button 
-  type="button" 
-  className="btn btn-secondary w-100 mt-2" 
-  onClick={handleNavigateToRegister}
->
-  Register
-</button>
-
+          <button
+            type="button"
+            className="btn btn-secondary w-100 mt-2"
+            onClick={handleNavigateToRegister}
+          >
+            Register
+          </button>
         </form>
       </div>
     </div>

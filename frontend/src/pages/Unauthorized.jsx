@@ -1,10 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE_URL } from "../apiRoutes";
 
 const Unauthorized = () => {
   const navigate = useNavigate();
 
-  const goHome = () => navigate("/");
+  const handleLogoutAndGoHome = async () => {
+    try {
+      await axios.post(`${ API_BASE_URL }/api/user/logout`, {}, { withCredentials: true });
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center bg-gray-100 px-4">
@@ -19,10 +29,10 @@ const Unauthorized = () => {
         </span>
       </p>
       <button
-        onClick={goHome}
+        onClick={handleLogoutAndGoHome}
         className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition"
       >
-        Go to Home
+        Logout &amp; Go to Home
       </button>
     </div>
   );

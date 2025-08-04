@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../apiRoutes";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Admin = () => {
 
     const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/user/logout", {}, { withCredentials: true });
+      await axios.post(`${ API_BASE_URL }/api/user/logout`, {}, { withCredentials: true });
       navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
@@ -27,7 +28,7 @@ const Admin = () => {
   // Fetch all users
   const fetchUsers = async () => {
   try {
-    const res = await axios.get("http://localhost:3000/api/user/get-all-users-admin", {
+    const res = await axios.get(`${ API_BASE_URL }/api/user/get-all-users-admin`, {
       withCredentials: true
     });
 

@@ -1,20 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE_URL } from "../apiRoutes";
 
 const Forbidden = () => {
   const navigate = useNavigate();
 
-    const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/user/logout", {}, { withCredentials: true });
+      await axios.post(`${ API_BASE_URL }/api/user/logout`, {}, { withCredentials: true });
       navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
+      navigate("/"); // still redirect home even if logout fails
     }
-  };
-
-  const handleGoHome = () => {
-    navigate("/");
   };
 
   return (
@@ -25,10 +24,10 @@ const Forbidden = () => {
         You do not have permission to view this page.
       </p>
       <button
-        onClick={handleGoHome}
+        onClick={handleLogout}
         className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition"
       >
-        Go Home
+        Logout &amp; Go Home
       </button>
     </div>
   );
