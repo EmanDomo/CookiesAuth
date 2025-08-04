@@ -77,20 +77,19 @@ app.use(cors({
 }));
 
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    rolling: true, // reset expiration time on each request
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 // 1 hour
-    }
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  rolling: true,
+  cookie: {
+    httpOnly: true,
+    secure: true,      // Required for HTTPS
+    sameSite: "none",  // Required for cross-site cookies
+    maxAge: 1000 * 60 * 60
+  }
+}));
+
 
 app.use('/api/user', userRoutes);
 
