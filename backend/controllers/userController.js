@@ -51,7 +51,7 @@ const userController = {
         }
     },
 
-    userLogin: async (req, res) => {
+userLogin: async (req, res) => {
     try {
         const { userName, password, role } = req.body;
         
@@ -72,16 +72,23 @@ const userController = {
             id: user.userID, 
             username: user.userName,
             role: user.role
-         };
-        console.log('Session after login:', req.session);
+        };
+        
+        // 🔍 DEBUG: Check if session is created
+        console.log('Session ID:', req.sessionID);
+        console.log('Session data after login:', req.session);
+        console.log('Session user:', req.session.user);
         
         return res.status(200).json({
-  success: true,
-  message: "Login successful",
-  user: userWithoutPassword  // includes role now
-});
-
-        
+            success: true,
+            message: "Login successful",
+            user: userWithoutPassword,
+            // 🔍 DEBUG: Send session info back
+            debug: {
+                sessionId: req.sessionID,
+                hasSession: !!req.session.user
+            }
+        });
 
     } catch (err) {
         console.log(err.message);
