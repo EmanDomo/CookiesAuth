@@ -87,11 +87,11 @@ app.use(
     saveUninitialized: false,
     rolling: true,
     cookie: {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none",
-  maxAge: 1000 * 60 * 60
-}
+      httpOnly: true,
+      secure: isProduction,      // cookies sent only via HTTPS in production
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 1000 * 60 * 60
+    }
   })
 );
 
