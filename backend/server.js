@@ -76,19 +76,24 @@ app.use(cors({
   credentials: true
 }));
 
+const isProduction = process.env.NODE_ENV === "production";
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  rolling: true,
-  cookie: {
-    httpOnly: true,
-    secure: true,      // Required for HTTPS
-    sameSite: "none",  // Required for cross-site cookies
-    maxAge: 1000 * 60 * 60
-  }
-}));
+app.set("trust proxy", 1); // very important when using Render or any reverse proxy
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 1000 * 60 * 60
+}
+  })
+);
 
 
 app.use('/api/user', userRoutes);
