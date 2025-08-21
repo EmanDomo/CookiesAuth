@@ -1,14 +1,13 @@
-// 
 
 import db from '../config/db.js';
 
 const userModel = {
 
-    async findByUserName(userName) {
+    async findByUserName(username) {
         try {
             const result = await db.query(
-                'SELECT * FROM tbl_users WHERE "userName" = $1',
-                [userName]
+                'SELECT * FROM tbl_users WHERE username = $1',
+                [username]
             );
             return result.rows[0];
         } catch (err) {
@@ -17,11 +16,11 @@ const userModel = {
         }
     },
 
-    async createUser(userName, userAge, password, role) {
+    async registerServiceProvider(first_name, last_name, email, phone, username, password, role, is_verified) {
         try {
             await db.query(
-                'INSERT INTO tbl_users ("userName", "userAge", "password", "role") VALUES ($1, $2, $3, $4)',
-                [userName, userAge, password, role || 'user']
+                'INSERT INTO tbl_users (first_name, last_name, email, phone, username, password, role, is_verified) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+                [first_name, last_name, email, phone, username, password, role || 'service_provider', is_verified]
             );
         } catch (err) {
             console.error(err.message);
@@ -49,11 +48,11 @@ const userModel = {
         }
     },
 
-    async userLogin(userName, password) {
+    async userLogin(username, password) {
         try {
             const result = await db.query(
-                'SELECT * FROM tbl_users WHERE "userName" = $1 AND "password" = $2',
-                [userName, password]
+                'SELECT * FROM tbl_users WHERE username = $1 AND password = $2',
+                [username, password]
             );
             return result.rows;
         } catch (err) {

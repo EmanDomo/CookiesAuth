@@ -14,6 +14,20 @@
 
 // export default pool;
 
+// import pkg from 'pg';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+// const { Pool } = pkg;
+
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   // Remove ssl if using local Postgres without SSL
+//   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+// });
+
+// export default pool;
+
 import pkg from 'pg';
 import dotenv from 'dotenv';
 
@@ -21,8 +35,11 @@ dotenv.config();
 const { Pool } = pkg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  // Remove ssl if using local Postgres without SSL
+  host: process.env.PG_HOST,
+  port: process.env.PG_PORT,
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  database: process.env.PG_DATABASE,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../apiRoutes";
 
 const Login = () => {
-  const [userName, setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userName || !password) {
+    if (!username || !password) {
       setError("Please fill in all fields");
       return;
     }
@@ -26,7 +26,7 @@ const Login = () => {
 
       const res = await axios.post(
         `${API_BASE_URL}/api/user/user-login`,
-        { userName, password },
+        { username, password },
         { withCredentials: true }
       );
 
@@ -38,7 +38,7 @@ const Login = () => {
 
         if (role === "admin") {
           navigate("/admin");
-        } else if (role === "user") {
+        } else if (role === "service_provider") {
           navigate("/home");
         } else {
           navigate("/");
@@ -65,7 +65,7 @@ const Login = () => {
               type="text"
               className="form-control"
               placeholder="Enter username"
-              value={userName}
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
